@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    <ul>
+        
+        {% for listing in listings %}
+        {% if listing.active %} 
+        <li><a href="{% url 'item' listing %}">{{ listing }}</a></li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% if user.is_authenticated %}
+    <h2>Your Wishlist</h2>
+    <ul>
+        {% for listing in wishlist %}
+        <li><a href="{% url 'item' listing %}">{{ listing }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %} 
+
+    
+{% endblock %}

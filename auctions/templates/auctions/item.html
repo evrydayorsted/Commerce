@@ -1,0 +1,50 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}{{ item }}{% endblock %}
+
+{% block body %}
+    <h2>{{ title }}</h2>
+    <ul>
+            <li><h3>{{ description }}</h3></li>
+            {% if active %}
+            <li><h3>Current bid: {{ bid }}</h3></li>
+            {% else %} 
+            <li><h3>Sale closed at {{ bid }} to {{ winner.bidder }}</h3>
+            {% endif %} 
+            <li><img src='{{image_url}}' alt="item picture"></li> 
+            <li><h3>Posted by: {{ poster }}</h3></li>
+
+    </ul>
+    {% if user.is_authenticated and active %} 
+    <form method="post" action="{% url 'item' item %}">
+        {% csrf_token %}
+        <button type="submit" name="button" value="add">
+          Add to wishlist
+        </button>
+    
+        <button type="submit" name="button" value="remove">
+          Remove from wishlist
+        </button>
+        <label for="bid value">Bid value (must be greater than current bid)</label>
+        <input type="number" name="bid_value">
+        <button type="submit" name="button" value="bid"> Submit Bid</button>
+        <input type="text" name="comment_text" placeholder="Comment Text">
+        <button type="submit" name="button" value="comment">Post Comment</button>
+        {% if user == poster %}
+        <button type="submit" name="button" value="close">Close Sale</button>
+        {% endif %} 
+    </form>
+    {% elif not active and user == winner.bidder %}
+    <h3>You have won the auction</h3>
+    {% elif not active %} 
+    <h3>This auction has closed. {{ winner.bidder }} won. {{ user }}</h3>
+    {% endif %} 
+    
+    {% if error %} 
+    <h3>Bid not large enough</h3>
+    {% endif %} 
+    <h3>Comments:</h3>
+    {% for blurb in all_comments %} 
+    <h4>{{ blurb.commenter }}: {{ blurb }}</h4>
+    {% endfor %} 
+{% endblock %}

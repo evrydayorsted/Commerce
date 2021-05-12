@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+{% load static %} 
+
+{% block body %}
+    <h2>Wishlist</h2>
+    <ul>
+        {% for thing in wishlist %}
+        <li><h2><a href="{% url 'item' thing.listing %}">{{ thing }}</a></h2></li>
+        <ul>
+            <li>{{ thing.listing.description }}</li>
+            <li>{{ thing.listing.bid }}</li>
+            <li><img src='{{ thing.listing.image_url }}' alt="{{thing.listing}} picture"></li>
+
+        </ul>
+        {% endfor %}
+    </ul>
+    
+
+    
+{% endblock %}
